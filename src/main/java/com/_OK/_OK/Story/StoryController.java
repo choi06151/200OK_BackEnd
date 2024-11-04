@@ -27,6 +27,8 @@ public class StoryController {
     private StroyService stroyService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private StoryRepository storyRepository;
 
     @GetMapping("init/{id}")
     public ResponseEntity<StoryDto> initStory(@PathVariable("id") Long userId){
@@ -60,5 +62,37 @@ public class StoryController {
 
     }
 
+    @PostMapping("/generate/{id}")
+    public ResponseEntity<StoryDto> generateStory(@PathVariable("id") Long userId,@RequestBody String choice){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Story existingStory = storyRepository.findByUserId(userId);
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("choice",choice);  // `choice`라는 키 이름 사용
+        requestBody.put("before_content",existingStory.getBeforeContent());  // `before_content`라는 키 이름 사용
+//        System.out.println(requestBody);
+        // 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        // 요청 본문을 HttpEntity로 래핑
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+        // FastAPI 서버로 POST 요청 보내기
+        ResponseEntity<StoryDto> response = restTemplate.postForEntity(aiUrl, requestEntity, StoryDto.class);
+        StoryDto storyDto = response.getBody();
+        if(storyDto!=null){
+            storyDto.setBeforeContent(storyDto.getContent()+"선택1 :"+storyDto.getChoice1()+"선택2 :"+storyDto.getChoice2()+"선택3 :"+storyDto.getChoice3());
+            storyDto.setUser(user);
+        }
+        if(storyDto!=null){
+            storyDto.setBeforeContent(storyDto.getContent()+"선택1 :"+storyDto.getChoice1()+"선택2 :"+storyDto.getChoice2()+"선택3 :"+storyDto.getChoice3());
+            storyDto.setUser(user);
+        }
+
+        existingStory.setBeforeContent(storyDto.getBeforeContent());
+        stroyService.saveBeforeContent(StoryMapper.mapToStoryDto(existingStory));
+        // FastAPI 서버에서 반환된 값을 리턴
+        return ResponseEntity.ok(storyDto);
+    }
 
 }
