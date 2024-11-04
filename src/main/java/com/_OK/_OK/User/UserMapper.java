@@ -1,2 +1,28 @@
-package com._OK._OK.User;public class UserMapper {
+package com._OK._OK.User;
+
+public class UserMapper {
+
+    public static UserDto mapToUserDto(User user){
+        return new UserDto(
+                user.getId(),
+                user.getName(),
+                user.getWater(),
+                user.getFood(),
+                user.getHp(),
+                user.getDay()
+        );
+    }
+
+    public static User mapToUser(UserDto userDto){
+        return new User(
+                userDto.getId(),
+                userDto.getName(),
+                userDto.getWater(),
+                userDto.getFood(),
+                userDto.getHp(),
+                userDto.getDay()
+        );
+    }
+
+
 }

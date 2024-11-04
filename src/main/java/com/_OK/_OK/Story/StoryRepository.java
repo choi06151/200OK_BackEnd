@@ -1,2 +1,8 @@
-package com._OK._OK.Story;public interface StoryRepository {
+package com._OK._OK.Story;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface StoryRepository extends JpaRepository<Story,Long>   {
 }
