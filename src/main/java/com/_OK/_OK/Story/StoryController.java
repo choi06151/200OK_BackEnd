@@ -2,6 +2,11 @@ package com._OK._OK.Story;
 
 import com._OK._OK.User.User;
 import com._OK._OK.User.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -18,6 +23,7 @@ import java.util.Map;
 @AllArgsConstructor
 @CrossOrigin("*")
 @RequestMapping("/amazon/story")
+@Tag(name="Story", description = "Story Api")
 public class StoryController {
     private final String aiUrl = "http://localhost:5000/generate_story";
 
@@ -31,7 +37,10 @@ public class StoryController {
     private StoryRepository storyRepository;
 
     @GetMapping("init/{id}")
-    public ResponseEntity<StoryDto> initStory(@PathVariable("id") Long userId){
+    @Operation(summary = "첫 스토리 생성",description = "첫 스토리를 생성합니다. 스토리는 UserId 별로 관리됩니다.")
+    public ResponseEntity<StoryDto> initStory(
+            @Parameter(description = "User가 생성될때 부여되는 고유 id")
+            @PathVariable("id") Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -62,8 +71,18 @@ public class StoryController {
 
     }
 
+    @Operation(summary = "선택기반 스토리 생성",description = "선택을 기반으로 스토리를 생성합니다. 스토리는 UserId 별로 관리됩니다.")
     @PostMapping("/generate/{id}")
-    public ResponseEntity<StoryDto> generateStory(@PathVariable("id") Long userId,@RequestBody String choice){
+    public ResponseEntity<StoryDto> generateStory(
+            @Parameter(description = "User가 생성될때 부여되는 고유 id")
+            @PathVariable("id") Long userId,
+            @RequestBody(
+                    description = "플레이어가 선택한 선택지의 내용 (선택지 번호는 제외하고 내용만 전달한다.)",
+                    required = true,
+                    content = @io.swagger.v3.oas.annotations.media.Content(
+                            schema = @Schema(type = "string", example = "{ \"choice\": \"주변을 더 탐색한다.\" }")
+                    )
+            )String choice){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Story existingStory = storyRepository.findByUserId(userId);
