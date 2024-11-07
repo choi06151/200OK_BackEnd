@@ -10,6 +10,7 @@ public class StoryMapper {
                 "",
                 "",
                 "",
+                null,
                 0,
                 0,
                 story.getBeforeContent()
