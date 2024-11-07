@@ -1,12 +1,9 @@
 package com._OK._OK.Story;
 
-import com._OK._OK.User.User;
-import com._OK._OK.User.UserRepository;
+
+import com._OK._OK.User.*;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -23,9 +20,10 @@ import java.util.Map;
 @AllArgsConstructor
 @CrossOrigin("*")
 @RequestMapping("/amazon/story")
-@Tag(name="Story", description = "Story Api")
+@Tag(name="Story", description = "Story Api") //스웨거 태그 어노테이션임
 public class StoryController {
-    private final String aiUrl = "http://localhost:5000/generate_story";
+    private final String aiStoryUrl = "http://localhost:5000/generate_story";
+    private final String aiImageUrl = "http://localhost:5000/generate_image";
 
     @Autowired
     private RestTemplate restTemplate;
@@ -35,11 +33,12 @@ public class StoryController {
     private UserRepository userRepository;
     @Autowired
     private StoryRepository storyRepository;
+    @Autowired
+    private ImageRepository imageRepository;
 
     @GetMapping("init/{id}")
-    @Operation(summary = "첫 스토리 생성",description = "첫 스토리를 생성합니다. 스토리는 UserId 별로 관리됩니다.")
+    @Operation(summary = "유저 생성", description = "유저를 생성합니다.<br> id는 자동생성됩니다. <br>이미지는 바이트코드로 리턴합니다.")
     public ResponseEntity<StoryDto> initStory(
-            @Parameter(description = "User가 생성될때 부여되는 고유 id")
             @PathVariable("id") Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -59,12 +58,24 @@ public class StoryController {
         HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
 
         // FastAPI 서버로 POST 요청 보내기
-        ResponseEntity<StoryDto> response = restTemplate.postForEntity(aiUrl, requestEntity, StoryDto.class);
+        ResponseEntity<StoryDto> response = restTemplate.postForEntity(aiStoryUrl, requestEntity, StoryDto.class);
         StoryDto storyDto = response.getBody();
         if(storyDto!=null){
             storyDto.setBeforeContent(storyDto.getContent()+"선택1 :"+storyDto.getChoice1()+"선택2 :"+storyDto.getChoice2()+"선택3 :"+storyDto.getChoice3());
             storyDto.setUser(user);
         }
+        Map<String,Object> requestBody_img = new HashMap<>();
+        requestBody_img.put("description", storyDto.getDescription());  // description라는 키 이름 사용
+        // 요청 본문을 HttpEntity로 래핑
+        HttpEntity<Map<String, Object>> requestEntity_img = new HttpEntity<>(requestBody_img, headers);
+
+        // FastAPI 서버로 POST 요청 보내기
+        ResponseEntity<byte[]> response_img = restTemplate.postForEntity(aiImageUrl, requestEntity_img, byte[].class);
+        storyDto.setImage(response_img.getBody());
+        // db에 이미지 저장 (서비스 클래스 따로안만들고 바로 저장)
+        ImageDto imageDto = new ImageDto(null,userId,response_img.getBody());
+        com._OK._OK.User.Image image = ImageMapper.mapToEntity(imageDto);
+        imageRepository.save(image);
         stroyService.saveBeforeContent(storyDto);
         // FastAPI 서버에서 반환된 값을 리턴
         return ResponseEntity.ok(storyDto);
@@ -73,23 +84,18 @@ public class StoryController {
 
     @Operation(summary = "선택기반 스토리 생성",description = "선택을 기반으로 스토리를 생성합니다. 스토리는 UserId 별로 관리됩니다.")
     @PostMapping("/generate/{id}")
+    @Operation(summary = "유저 생성", description = "유저를 생성합니다.<br> id는 자동생성됩니다.<br>이미지는 바이트코드로 리턴합니다.")
     public ResponseEntity<StoryDto> generateStory(
-            @Parameter(description = "User가 생성될때 부여되는 고유 id")
-            @PathVariable("id") Long userId,
-            @RequestBody(
-                    description = "플레이어가 선택한 선택지의 내용 (선택지 번호는 제외하고 내용만 전달한다.)",
-                    required = true,
-                    content = @io.swagger.v3.oas.annotations.media.Content(
-                            schema = @Schema(type = "string", example = "{ \"choice\": \"주변을 더 탐색한다.\" }")
-                    )
-            )String choice){
+            @PathVariable("id") Long userId, @RequestBody ChoiceDto choiceDto){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Story existingStory = storyRepository.findByUserId(userId);
+        String choice = choiceDto.getChoice();
+        System.out.println("choice:"+choice);
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("choice",choice);  // `choice`라는 키 이름 사용
         requestBody.put("before_content",existingStory.getBeforeContent());  // `before_content`라는 키 이름 사용
-//        System.out.println(requestBody);
+//      System.out.println(requestBody);
         // 헤더 설정
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -97,7 +103,7 @@ public class StoryController {
         // 요청 본문을 HttpEntity로 래핑
         HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
         // FastAPI 서버로 POST 요청 보내기
-        ResponseEntity<StoryDto> response = restTemplate.postForEntity(aiUrl, requestEntity, StoryDto.class);
+        ResponseEntity<StoryDto> response = restTemplate.postForEntity(aiStoryUrl, requestEntity, StoryDto.class);
         StoryDto storyDto = response.getBody();
         if(storyDto!=null){
             storyDto.setBeforeContent(storyDto.getContent()+"선택1 :"+storyDto.getChoice1()+"선택2 :"+storyDto.getChoice2()+"선택3 :"+storyDto.getChoice3());
@@ -109,6 +115,18 @@ public class StoryController {
         }
 
         existingStory.setBeforeContent(storyDto.getBeforeContent());
+        Map<String,Object> requestBody_img = new HashMap<>();
+        requestBody_img.put("description", storyDto.getDescription());  // description라는 키 이름 사용
+        // 요청 본문을 HttpEntity로 래핑
+        HttpEntity<Map<String, Object>> requestEntity_img = new HttpEntity<>(requestBody_img, headers);
+
+        // FastAPI 서버로 POST 요청 보내기
+        ResponseEntity<byte[]> response_img = restTemplate.postForEntity(aiImageUrl, requestEntity_img, byte[].class);
+        storyDto.setImage(response_img.getBody());
+        // db에 이미지 저장 (서비스 클래스 따로안만들고 바로 저장)
+        ImageDto imageDto = new ImageDto(null,userId,response_img.getBody());
+        com._OK._OK.User.Image image = ImageMapper.mapToEntity(imageDto);
+        imageRepository.save(image);
         stroyService.saveBeforeContent(StoryMapper.mapToStoryDto(existingStory));
         // FastAPI 서버에서 반환된 값을 리턴
         return ResponseEntity.ok(storyDto);

@@ -18,6 +18,7 @@ public class StoryDto {
     private String choice2;       // 두 번째 선택지
     private String choice3;       // 세 번째 선택지
     private String description;   // 상황을 묘사하는 텍스트
+    private byte[] image;
     private int water;            // 물의 변동량
     private int food;             // 음식의 변동량
     private String beforeContent; // 직전 스토리와 선택지
