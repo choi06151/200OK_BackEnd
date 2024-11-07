@@ -8,7 +8,7 @@ public class StotyServiceImpl implements StroyService {
     @Autowired
     StoryRepository storyRepository;
     @Override
-    public StoryDto saveBeforeContent(StoryDto storyDto) {
+    public StoryDto saveStory(StoryDto storyDto) {
         Story story = StoryMapper.mapToStory(storyDto);
         Story savedStory = storyRepository.save(story);
         return StoryMapper.mapToStoryDto(savedStory);
