@@ -1,0 +1,25 @@
+[33m32931c7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mswagger[m[33m, [m[1;32mmain[m[33m)[m HEAD@{0}: checkout: moving from main to dev
+[33m32931c7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mswagger[m[33m, [m[1;32mmain[m[33m)[m HEAD@{1}: reset: moving to HEAD
+[33m32931c7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mswagger[m[33m, [m[1;32mmain[m[33m)[m HEAD@{2}: checkout: moving from 68a460f450f8f54a59123afad8018e2f0b71eaf1 to main
+[33m68a460f[m HEAD@{3}: checkout: moving from dev to 68a460f450f8f54a59123afad8018e2f0b71eaf1
+[33m32931c7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mswagger[m[33m, [m[1;32mmain[m[33m)[m HEAD@{4}: reset: moving to origin/main
+[33m32931c7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mswagger[m[33m, [m[1;32mmain[m[33m)[m HEAD@{5}: checkout: moving from main to dev
+[33m32931c7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mswagger[m[33m, [m[1;32mmain[m[33m)[m HEAD@{6}: merge swagger: Fast-forward
+[33m68a460f[m HEAD@{7}: checkout: moving from swagger to main
+[33m32931c7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mswagger[m[33m, [m[1;32mmain[m[33m)[m HEAD@{8}: commit: FEAT : Add SWAGGER
+[33m68a460f[m HEAD@{9}: checkout: moving from main to swagger
+[33m68a460f[m HEAD@{10}: checkout: moving from swagger to main
+[33m68a460f[m HEAD@{11}: reset: moving to main
+[33m68a460f[m HEAD@{12}: checkout: moving from main to swagger
+[33m68a460f[m HEAD@{13}: commit: FEAT : Generate Story
+[33m5da4f90[m HEAD@{14}: commit: FEAT : Story
+[33m5dd35ea[m HEAD@{15}: commit: FEAT : Story Init Api
+[33mc069556[m HEAD@{16}: commit: FEAT : Add CreateUser API
+[33m973f939[m HEAD@{17}: commit: FEAT : add mapper
+[33m9e2012d[m HEAD@{18}: commit: FEAD : User Dto, Entity 추가
+[33md2c90f5[m[33m ([m[1;31mupstream/main[m[33m)[m HEAD@{19}: pull upstream main: Fast-forward
+[33mc9996a4[m HEAD@{20}: pull origin main --rebase (finish): returning to refs/heads/main
+[33mc9996a4[m HEAD@{21}: pull origin main --rebase (pick): init
+[33m344ce5e[m HEAD@{22}: pull origin main --rebase (start): checkout 344ce5e773d7bbbc1a20267d033d6fdabbdb65fb
+[33m1c0de76[m[33m ([m[1;31morigin/master[m[33m)[m HEAD@{23}: Branch: renamed refs/heads/master to refs/heads/main
+[33m1c0de76[m[33m ([m[1;31morigin/master[m[33m)[m HEAD@{25}: commit (initial): init

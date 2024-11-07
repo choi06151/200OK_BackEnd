@@ -1,6 +1,8 @@
 package com._OK._OK.Story;
 
 import com._OK._OK.User.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -17,6 +19,7 @@ import java.util.Map;
 @AllArgsConstructor
 @CrossOrigin("*")
 @RequestMapping("/amazon/story")
+@Tag(name="Story", description = "Story Api") //스웨거 태그 어노테이션임
 public class StoryController {
     private final String aiStoryUrl = "http://localhost:5000/generate_story";
     private final String aiImageUrl = "http://localhost:5000/generate_image";
@@ -33,7 +36,9 @@ public class StoryController {
     private ImageRepository imageRepository;
 
     @GetMapping("init/{id}")
-    public ResponseEntity<StoryDto> initStory(@PathVariable("id") Long userId){
+    @Operation(summary = "유저 생성", description = "유저를 생성합니다.<br> id는 자동생성됩니다. <br>이미지는 바이트코드로 리턴합니다.")
+    public ResponseEntity<StoryDto> initStory(
+            @PathVariable("id") Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -77,10 +82,14 @@ public class StoryController {
     }
 
     @PostMapping("/generate/{id}")
-    public ResponseEntity<StoryDto> generateStory(@PathVariable("id") Long userId,@RequestBody String choice){
+    @Operation(summary = "유저 생성", description = "유저를 생성합니다.<br> id는 자동생성됩니다.<br>이미지는 바이트코드로 리턴합니다.")
+    public ResponseEntity<StoryDto> generateStory(
+            @PathVariable("id") Long userId, @RequestBody ChoiceDto choiceDto){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Story existingStory = storyRepository.findByUserId(userId);
+        String choice = choiceDto.getChoice();
+        System.out.println("choice:"+choice);
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("choice",choice);  // `choice`라는 키 이름 사용
         requestBody.put("before_content",existingStory.getBeforeContent());  // `before_content`라는 키 이름 사용
