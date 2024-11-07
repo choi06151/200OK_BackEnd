@@ -23,5 +23,16 @@ public class Story {
     private User user;  // User 엔티티와의 일대일 관계
     @Column
     private String beforeContent;
+    @Column
+    private String content;
+    @Column
+    private String choice1;
+    @Column
+    private String choice2;
+    @Column
+    private String choice3;
+    @Lob
+    private byte[] image;
+
 
 }

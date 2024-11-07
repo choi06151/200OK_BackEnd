@@ -5,12 +5,12 @@ public class StoryMapper {
         return new StoryDto(
                 story.getId(),
                 story.getUser(),
+                story.getContent(),
+                story.getChoice1(),
+                story.getChoice2(),
+                story.getChoice3(),
                 "",
-                "",
-                "",
-                "",
-                "",
-                null,
+                story.getImage(),
                 0,
                 0,
                 story.getBeforeContent()
@@ -21,7 +21,12 @@ public class StoryMapper {
         return new Story(
                 storyDto.getId(),
                 storyDto.getUser(),
-                storyDto.getBeforeContent()
+                storyDto.getBeforeContent(),
+                storyDto.getContent(),
+                storyDto.getChoice1(),
+                storyDto.getChoice2(),
+                storyDto.getChoice3(),
+                storyDto.getImage()
         );
     }
 }
