@@ -8,7 +8,8 @@ public class UserMapper {
                 user.getName(),
                 user.getWater(),
                 user.getFood(),
-                user.getHp(),
+                user.isAlive(),
+                user.getProbability(),
                 user.getDay()
         );
     }
@@ -19,7 +20,8 @@ public class UserMapper {
                 userDto.getName(),
                 userDto.getWater(),
                 userDto.getFood(),
-                userDto.getHp(),
+                userDto.isAlive(),
+                userDto.getProbability(),
                 userDto.getDay()
         );
     }

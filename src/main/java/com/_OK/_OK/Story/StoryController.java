@@ -29,6 +29,8 @@ public class StoryController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private  UserService userService;
+    @Autowired
     private StoryRepository storyRepository;
     @Autowired
     private ImageRepository imageRepository;
@@ -132,8 +134,11 @@ public class StoryController {
         user.setDay(user.getDay()+1);
         user.setFood(user.getFood()+storyDto.getFood());
         user.setWater(user.getWater()+storyDto.getWater());
+        //유저의 생존 사망을 판단.
+        if(!userService.isAlive(storyDto)){//사망
+            user.setAlive(false);
+        }
         userRepository.save(user);
-
         // FastAPI 서버에서 반환된 값을 리턴
         return ResponseEntity.ok(storyDto);
     }
