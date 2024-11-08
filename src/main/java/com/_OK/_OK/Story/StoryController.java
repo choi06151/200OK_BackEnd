@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,7 @@ public class StoryController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    @Lazy
     private  UserService userService;
     @Autowired
     private StoryRepository storyRepository;
