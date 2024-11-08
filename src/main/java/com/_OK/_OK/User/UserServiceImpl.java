@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void setprobability(User user) {
+    public void setProbability(User user) {
         int waterAndFood = user.getFood() + user.getWater();
         switch (waterAndFood){
             case 10 :
@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         user.setWater(user.getWater()+dWater);
-        setprobability(user);
+        setProbability(user);
         userRepository.save(user);
         UserDto userDto = UserMapper.mapToUserDto(user);
         return userDto;
@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         user.setFood(user.getFood()+dFood);
-        setprobability(user);
+        setProbability(user);
         userRepository.save(user);
         UserDto userDto = UserMapper.mapToUserDto(user);
         return userDto;
