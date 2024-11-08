@@ -22,6 +22,8 @@ public class User {
     private int water;
     @Column
     private int food;
+    @Column
+    private int hp = 10;
     @Column(nullable = false)
     private boolean alive = true;
     @Column
