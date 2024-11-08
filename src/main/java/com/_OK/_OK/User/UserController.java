@@ -19,6 +19,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
+
     @Operation(summary = "유저 생성", description = "유저를 생성합니다.<br> id는 자동생성됩니다. id, day 필드는 Body에 포함하지 마세요.")
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto){
         UserDto createUser = userService.createUser(userDto);
