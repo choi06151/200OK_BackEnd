@@ -22,11 +22,12 @@ public class UserServiceImpl implements UserService{
     public boolean isAlive(StoryDto storyDto) {
         User user = storyDto.getUser();
         int waterAndFood = storyDto.getFood()+storyDto.getWater();
+        int damage = storyDto.getDamage();
         int totalPer = 0; //죽을 확률
         int penalty = 0; // 패널티 확률 (물 + 식량 변화량이 -3이하면 발동)
         if(user.getWater()<0||user.getFood()<0)return false;//물, 식량값 음수면 즉시 사망
-        if(waterAndFood<-2){//물 + 식량 변화량이 -3이하면 패널티
-            penalty = waterAndFood*(-10);
+        if(damage>0){// 데미지는 즉시 패널티 확률로 적용
+            penalty = damage * 10;
             totalPer += penalty;
         }
         //waterAndFood값에 따른 확률
