@@ -15,7 +15,8 @@ public class UserDto {
     private String name;
     private int water;
     private int food;
-    private int hp;
+    private boolean alive = true;
+    private int probability = 1;
     private int day = 1;
 public static UserDto createUserDto(User user){
 return new UserDto(
@@ -23,7 +24,8 @@ return new UserDto(
         user.getName(),
         user.getWater(),
         user.getFood(),
-        user.getHp(),
+        user.isAlive(),
+        user.getProbability(),
         user.getDay()
 );
 }

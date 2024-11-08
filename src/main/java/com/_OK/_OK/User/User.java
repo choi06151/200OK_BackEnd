@@ -23,7 +23,9 @@ public class User {
     @Column
     private int food;
     @Column
-    private int hp;
+    private boolean alive = true;
+    @Column
+    private int probability = 1;
     @Column
     private int day;
 
