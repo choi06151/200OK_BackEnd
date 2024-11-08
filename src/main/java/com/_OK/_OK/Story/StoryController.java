@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,7 @@ public class StoryController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    @Lazy
     private  UserService userService;
     @Autowired
     private StoryRepository storyRepository;
@@ -135,7 +137,7 @@ public class StoryController {
         user.setFood(user.getFood()+storyDto.getFood());
         user.setWater(user.getWater()+storyDto.getWater());
         //유저의 생존 사망을 판단.
-        if(!userService.isAlive(storyDto)){//사망
+        if(!userService.isAlive(storyDto,user)){//사망
             user.setAlive(false);
         }
         userRepository.save(user);

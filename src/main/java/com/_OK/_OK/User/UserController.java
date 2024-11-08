@@ -28,10 +28,32 @@ public class UserController {
     }
     @GetMapping("/userInfo/{id}")
     @Operation(summary = "플레이어 정보 조회",description = "플레이어의 정보를 조회합니다.<br>id는 유저 고유id를 의미한다.")
-    public ResponseEntity<UserDto> Userinfo(@PathVariable("id") Long userId){
+    public ResponseEntity<UserDto> userinfo(@PathVariable("id") Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         UserDto userDto = UserMapper.mapToUserDto(user);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
+    }
+    //물 개수 수정
+    @PatchMapping("/userInfo/editWater/{id}/{delta}")
+    @Operation(summary = "물 개수 수정",description = "물 개수의 변화량을 주면 user의 water가 수정된다. <br> -1,1,2 와 같이 정수로 줘야한다.<br>수정된 user를 반환한다.")
+    public ResponseEntity<UserDto> editWater(
+            @PathVariable("id") Long userId,
+            @PathVariable("delta") int dWater){
+
+        UserDto userDto = userService.editWater(userId,dWater);
+        return new ResponseEntity<>(userDto,HttpStatus.OK);
+
+    }
+    //음식 개수 수정
+    @PatchMapping("/userInfo/editFood/{id}/{delta}")
+    @Operation(summary = "음식 개수 수정",description = "음식 개수의 변화량을 주면 user의 food가 수정된다. <br> -1,1,2 와 같이 정수로 줘야한다.<br>수정된 user를 반환한다.")
+    public ResponseEntity<UserDto> editFood(
+            @PathVariable("id") Long userId,
+            @PathVariable("delta") int dFood){
+
+        UserDto userDto = userService.editFood(userId,dFood);
+        return new ResponseEntity<>(userDto,HttpStatus.OK);
+
     }
 }

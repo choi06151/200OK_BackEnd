@@ -13,6 +13,7 @@ public class StoryMapper {
                 story.getImage(),
                 0,
                 0,
+                0,
                 story.getBeforeContent()
         );
     }
