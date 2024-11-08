@@ -1,6 +1,5 @@
 package com._OK._OK.Story;
 
-
 import com._OK._OK.User.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -82,7 +81,6 @@ public class StoryController {
 
     }
 
-    @Operation(summary = "선택기반 스토리 생성",description = "선택을 기반으로 스토리를 생성합니다. 스토리는 UserId 별로 관리됩니다.")
     @PostMapping("/generate/{id}")
     @Operation(summary = "스토리 생성", description = "스토리를 생성합니다. <br>이미지는 바이트코드로 리턴합니다.")
     @Transactional
@@ -96,7 +94,6 @@ public class StoryController {
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("choice",choice);  // `choice`라는 키 이름 사용
         requestBody.put("before_content",existingStory.getBeforeContent());  // `before_content`라는 키 이름 사용
-//      System.out.println(requestBody);
         // 헤더 설정
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
