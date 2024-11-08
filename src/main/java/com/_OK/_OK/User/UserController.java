@@ -17,6 +17,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping
 
@@ -24,5 +26,13 @@ public class UserController {
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto){
         UserDto createUser = userService.createUser(userDto);
         return new ResponseEntity<>(createUser, HttpStatus.CREATED);
+    }
+    @GetMapping("/userInfo/{id}")
+    @Operation(summary = "플레이어 정보 조회",description = "플레이어의 정보를 조회합니다.<br>id는 유저 고유id를 의미한다.")
+    public ResponseEntity<UserDto> Userinfo(@PathVariable("id") Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        UserDto userDto = UserMapper.mapToUserDto(user);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 }

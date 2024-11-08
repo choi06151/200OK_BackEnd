@@ -128,6 +128,11 @@ public class StoryController {
         existingStory.setImage(storyDto.getImage());
         imageRepository.save(image);
         storyRepository.save(existingStory);
+        //User 정보 변경
+        user.setDay(user.getDay()+1);
+        user.setFood(user.getFood()+storyDto.getFood());
+        user.setWater(user.getWater()+storyDto.getWater());
+        userRepository.save(user);
 
         // FastAPI 서버에서 반환된 값을 리턴
         return ResponseEntity.ok(storyDto);
