@@ -140,6 +140,10 @@ public class StoryController {
         if(!userService.isAlive(storyDto,user)){//사망
             user.setAlive(false);
         }
+        if(user.getDay()<4) user.setHp(user.getHp()-2); //매일매일 체력 감소
+        else if(user.getDay()<7)user.setHp(user.getHp()-3);
+        else user.setHp(user.getHp()-5);
+
         userRepository.save(user);
         // FastAPI 서버에서 반환된 값을 리턴
         return ResponseEntity.ok(storyDto);

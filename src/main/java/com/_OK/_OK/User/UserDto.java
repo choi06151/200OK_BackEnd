@@ -15,6 +15,7 @@ public class UserDto {
     private String name;
     private int water;
     private int food;
+    private int hp = 10;
     private boolean alive = true;
     private int probability = 1;
     private int day = 1;

@@ -36,7 +36,7 @@ public class UserController {
     }
     //물 개수 수정
     @PatchMapping("/userInfo/editWater/{id}/{delta}")
-    @Operation(summary = "물 개수 수정",description = "물 개수의 변화량을 주면 user의 water가 수정된다. <br> -1,1,2 와 같이 정수로 줘야한다.<br>수정된 user를 반환한다.")
+    @Operation(summary = "물 개수 수정",description = "물 개수의 변화량을 주면 user의 water가 수정된다. <br> -1와 같이 정수로 줘야한다.<br>수정된 user를 반환한다.<br>가능하면 -1씩 여러번 호출하는게 좋음")
     public ResponseEntity<UserDto> editWater(
             @PathVariable("id") Long userId,
             @PathVariable("delta") int dWater){
@@ -47,7 +47,7 @@ public class UserController {
     }
     //음식 개수 수정
     @PatchMapping("/userInfo/editFood/{id}/{delta}")
-    @Operation(summary = "음식 개수 수정",description = "음식 개수의 변화량을 주면 user의 food가 수정된다. <br> -1,1,2 와 같이 정수로 줘야한다.<br>수정된 user를 반환한다.")
+    @Operation(summary = "음식 개수 수정",description = "음식 개수의 변화량을 주면 user의 food가 수정된다. <br> -1와 같이 정수로 줘야한다.<br>수정된 user를 반환한다.<br>가능하면 -1씩 여러번 호출하는게 좋음")
     public ResponseEntity<UserDto> editFood(
             @PathVariable("id") Long userId,
             @PathVariable("delta") int dFood){
