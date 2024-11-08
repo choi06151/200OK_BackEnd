@@ -137,7 +137,7 @@ public class StoryController {
         user.setFood(user.getFood()+storyDto.getFood());
         user.setWater(user.getWater()+storyDto.getWater());
         //유저의 생존 사망을 판단.
-        if(!userService.isAlive(storyDto)){//사망
+        if(!userService.isAlive(storyDto,user)){//사망
             user.setAlive(false);
         }
         userRepository.save(user);
