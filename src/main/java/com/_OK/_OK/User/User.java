@@ -22,7 +22,7 @@ public class User {
     private int water;
     @Column
     private int food;
-    @Column
+    @Column(nullable = false)
     private boolean alive = true;
     @Column
     private int probability = 1;
