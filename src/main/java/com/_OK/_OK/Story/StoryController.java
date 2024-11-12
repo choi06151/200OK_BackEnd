@@ -22,6 +22,7 @@ import java.util.Map;
 public class StoryController {
     private final String aiStoryUrl = "http://localhost:5000/generate_story";
     private final String aiImageUrl = "http://localhost:5000/generate_image";
+    private final String aiMonoUrl = "http://localhost:5000/generate_monologue";
 
     @Autowired
     private RestTemplate restTemplate;
@@ -36,6 +37,26 @@ public class StoryController {
     private StoryRepository storyRepository;
     @Autowired
     private ImageRepository imageRepository;
+
+    @GetMapping("monologue/{id}")
+    @Operation(summary = "로딩시 플레이어가 하는 독백 대사 생성", description = "10개의 독백대사를 생성합니다.<br>플레이어가 선택하기전에 호출하는 api(미리 로딩페이지 준비)")
+    @Transactional
+    public ResponseEntity<MonologueDto> creatMonologue(
+            @PathVariable("id") Long userId){
+        Story existingStory = storyRepository.findByUserId(userId);
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("content",existingStory.getContent());  // `content`라는 키 이름 사용
+        // 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        // 요청 본문을 HttpEntity로 래핑
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+        // FastAPI 서버로 POST 요청 보내기
+        ResponseEntity<MonologueDto> response = restTemplate.postForEntity(aiMonoUrl, requestEntity, MonologueDto.class);
+        MonologueDto monologueDto = response.getBody();
+        return ResponseEntity.ok(monologueDto);
+    }
 
     @GetMapping("init/{id}")
     @Operation(summary = "첫 스토리 생성", description = "스토리를 생성합니다. <br>이미지는 바이트코드로 리턴합니다.")
