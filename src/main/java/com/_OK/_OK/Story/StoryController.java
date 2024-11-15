@@ -44,7 +44,8 @@ public class StoryController {
     private ImageRepository imageRepository;
 
     @GetMapping("monologue/{id}")
-    @Operation(summary = "로딩시 플레이어가 하는 독백 대사 생성", description = "10개의 독백대사와 태그를 생성합니다.<br>플레이어가 선택하기전에 호출하는 api(미리 로딩페이지 준비)")
+    @Operation(summary = "로딩시 플레이어가 하는 독백 대사 생성", description = "10개의 독백대사와 태그를 생성합니다.<br>플레이어가 선택하기전에 호출하는 api(미리 로딩페이지 준비)" +
+            "<br>태그는 [ Peaceful, Tense,  Dangerous, Scary,  Jungle Sounds, Animal Sounds, River Sounds, Battle,  Sad, Lonely ] 이 중 하나입니다.")
     @Transactional
     public ResponseEntity<MonologueDto> creatMonologue(
             @PathVariable("id") Long userId){
