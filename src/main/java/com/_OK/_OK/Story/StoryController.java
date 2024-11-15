@@ -11,6 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +27,7 @@ public class StoryController {
     private final String aiStoryUrl = "http://localhost:5000/generate_story";
     private final String aiImageUrl = "http://localhost:5000/generate_image";
     private final String aiMonoUrl = "http://localhost:5000/generate_monologue";
+    private static final int MAX_RETRIES = 2;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -39,7 +44,8 @@ public class StoryController {
     private ImageRepository imageRepository;
 
     @GetMapping("monologue/{id}")
-    @Operation(summary = "로딩시 플레이어가 하는 독백 대사 생성", description = "10개의 독백대사를 생성합니다.<br>플레이어가 선택하기전에 호출하는 api(미리 로딩페이지 준비)")
+    @Operation(summary = "로딩시 플레이어가 하는 독백 대사 생성", description = "10개의 독백대사와 태그를 생성합니다.<br>플레이어가 선택하기전에 호출하는 api(미리 로딩페이지 준비)" +
+            "<br>태그는 [ Peaceful, Tense,  Dangerous, Scary,  Jungle Sounds, Animal Sounds, River Sounds, Battle,  Sad, Lonely ] 이 중 하나입니다.")
     @Transactional
     public ResponseEntity<MonologueDto> creatMonologue(
             @PathVariable("id") Long userId){
@@ -144,15 +150,31 @@ public class StoryController {
         // 요청 본문을 HttpEntity로 래핑
         HttpEntity<Map<String, Object>> requestEntity_img = new HttpEntity<>(requestBody_img, headers);
 
-        // FastAPI 서버로 POST 요청 보내기
-        ResponseEntity<byte[]> response_img = restTemplate.postForEntity(aiImageUrl, requestEntity_img, byte[].class);
-        storyDto.setImage(response_img.getBody());
-        // db에 이미지 저장 (서비스 클래스 따로안만들고 바로 저장)
-        ImageDto imageDto = new ImageDto(null,userId,response_img.getBody());
-        com._OK._OK.User.Image image = ImageMapper.mapToEntity(imageDto);
-        existingStory.setImage(storyDto.getImage());
-        imageRepository.save(image);
-        storyRepository.save(existingStory);
+        int attempt = 0; //이미지 호출 횟수
+        while(attempt++<MAX_RETRIES){
+            try{
+                // FastAPI 서버로 POST 요청 보내기
+                ResponseEntity<byte[]> response_img = restTemplate.postForEntity(aiImageUrl, requestEntity_img, byte[].class);
+                storyDto.setImage(response_img.getBody());
+                // db에 이미지 저장 (서비스 클래스 따로안만들고 바로 저장)
+                ImageDto imageDto = new ImageDto(null,userId,response_img.getBody());
+                com._OK._OK.User.Image image = ImageMapper.mapToEntity(imageDto);
+                existingStory.setImage(storyDto.getImage());
+                imageRepository.save(image);
+                storyRepository.save(existingStory);
+                break;
+            }
+            catch (Exception e){
+                System.err.println("AI 서버로부터 이미지 생성 실패 (시도 횟수: " + attempt + "): " + e.getMessage());
+                if (attempt == MAX_RETRIES) {
+                    byte[] defaultImage = getDefaultImage();
+                    storyDto.setImage(defaultImage);
+                    storyRepository.save(existingStory);
+                    System.out.println("모든 시도 실패: 기본 이미지를 StoryDto에 설정");
+                }
+            }
+        }
+
         //User 정보 변경
         user.setDay(user.getDay()+1);
         user.setFood(user.getFood()+storyDto.getFood());
@@ -193,5 +215,19 @@ public class StoryController {
         return ResponseEntity.ok(response);
     }
 
+//이미지 호출 실패시 기본이미지 반환
+    public byte[] getDefaultImage() {
+        try {
+            // resource.image 폴더 내 기본 이미지 파일 경로를 설정합니다.
+            Path defaultImagePath = Paths.get("src/main/resources/img/SensitiveContent.png");
+            // 파일을 바이트 배열로 변환하여 반환합니다.
+            return Files.readAllBytes(defaultImagePath);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("기본 이미지를 로드하는 데 실패했습니다.");
+            return new byte[0]; // 실패 시 빈 배열 반환
+        }
+    }
 
 }
