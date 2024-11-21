@@ -4,6 +4,7 @@ import com._OK._OK.Story.StoryDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -17,7 +18,11 @@ public class UserServiceImpl implements UserService{
         User savedUser = userRepository.save(user);
         return UserMapper.mapToUserDto(savedUser);
     }
-
+    // 정렬된 데이터를 반환
+    @Override
+    public List<User> getSortedUsers() {
+        return userRepository.findAllByAliveFalseOrderByDayDescFoodDescWaterDescIdAsc();
+    }
     @Override
     public boolean isAlive(StoryDto storyDto,User user) {
         int hp = user.getHp();
