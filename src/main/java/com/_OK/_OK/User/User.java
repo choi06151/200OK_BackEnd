@@ -30,6 +30,12 @@ public class User {
     private int probability = 1;
     @Column
     private int day;
+    public void setWater(int water) {
+        if (water < 0) this.water = 0;
 
+    }
+    public void setFood(int food){
+        if (food<0)this.food = 0;
+    }
 
 }
