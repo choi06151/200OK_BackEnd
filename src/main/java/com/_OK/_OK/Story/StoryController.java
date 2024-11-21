@@ -16,7 +16,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
@@ -42,6 +44,17 @@ public class StoryController {
     private StoryRepository storyRepository;
     @Autowired
     private ImageRepository imageRepository;
+
+    // 유저 day별 이미지 리스트 받기
+    @GetMapping("getImages/{id}")
+    @Operation(summary = "유저 day별 이미지 리스트 받기", description = "지금까지 해당 userId로 생성된 모든 이미지를 받는다.")
+    public ResponseEntity< List<ImageDto>> getImages(@PathVariable("id") Long userId){
+        List<Image> imageList = imageRepository.findAllByUserIdOrderByIdAsc(userId);
+        List<ImageDto> imageDtoList = imageList.stream()
+                .map(ImageMapper::mapToDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(imageDtoList);
+    }
 
     @GetMapping("monologue/{id}")
     @Operation(summary = "로딩시 플레이어가 하는 독백 대사 생성", description = "10개의 독백대사와 태그를 생성합니다.<br>플레이어가 선택하기전에 호출하는 api(미리 로딩페이지 준비)" +
