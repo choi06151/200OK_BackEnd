@@ -187,11 +187,17 @@ public class StoryController {
                 }
             }
         }
-
+        //water food 감소량이 남아있는 water food보다 클 경우 hp를 감소시킴
+        if(user.getFood()+storyDto.getFood()<0){
+            user.setHp(user.getHp()+(user.getFood()+storyDto.getFood()));
+        }
+        if(user.getWater()+storyDto.getWater()<0){
+            user.setHp(user.getHp()+(user.getWater()+storyDto.getWater()));
+        }
         //User 정보 변경
         user.setDay(user.getDay()+1);
-        user.setFood(user.getFood()+storyDto.getFood());
-        user.setWater(user.getWater()+storyDto.getWater());
+        user.setFood(user.getFood()+storyDto.getFood()); //음수불가
+        user.setWater(user.getWater()+storyDto.getWater()); //음수불가
         //유저의 생존 사망을 판단.
         if(!userService.isAlive(storyDto,user)){//사망
             user.setAlive(false);
