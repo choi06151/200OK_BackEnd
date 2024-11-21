@@ -20,4 +20,6 @@ public class UserDto {
     private int probability = 1;
     private int day = 1;
 
+
+
 }
