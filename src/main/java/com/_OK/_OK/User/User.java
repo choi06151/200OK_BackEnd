@@ -32,10 +32,11 @@ public class User {
     private int day;
     public void setWater(int water) {
         if (water < 0) this.water = 0;
-
+        else this.water = water;
     }
     public void setFood(int food){
         if (food<0)this.food = 0;
+        else this.food = food;
     }
 
 }
