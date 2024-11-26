@@ -151,6 +151,9 @@ public class StoryController {
             storyDto.setBeforeContent(storyDto.getContent()+"선택1 :"+storyDto.getChoice1()+"선택2 :"+storyDto.getChoice2()+"선택3 :"+storyDto.getChoice3());
             storyDto.setUser(user);
         }
+        if (storyDto.getCauseOfDeath() == null || storyDto.getCauseOfDeath().isEmpty()) {
+            storyDto.setCauseOfDeath("두려움에 벌벌 떨다가 사망...");
+        }
 
 
         existingStory.setBeforeContent(storyDto.getBeforeContent());
