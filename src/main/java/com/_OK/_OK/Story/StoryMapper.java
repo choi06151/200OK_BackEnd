@@ -14,7 +14,8 @@ public class StoryMapper {
                 0,
                 0,
                 0,
-                story.getBeforeContent()
+                story.getBeforeContent(),
+                story.getCauseOfDeath()
         );
     }
 
@@ -27,7 +28,9 @@ public class StoryMapper {
                 storyDto.getChoice1(),
                 storyDto.getChoice2(),
                 storyDto.getChoice3(),
+                storyDto.getCauseOfDeath(),
                 storyDto.getImage()
+
         );
     }
 }
