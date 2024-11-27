@@ -161,6 +161,7 @@ public class StoryController {
         existingStory.setChoice1(storyDto.getChoice1());
         existingStory.setChoice2(storyDto.getChoice2());
         existingStory.setChoice3(storyDto.getChoice3());
+        existingStory.setCauseOfDeath(storyDto.getCauseOfDeath());
         Map<String,Object> requestBody_img = new HashMap<>();
         requestBody_img.put("description", storyDto.getDescription());  // description라는 키 이름 사용
         // 요청 본문을 HttpEntity로 래핑
@@ -216,7 +217,7 @@ public class StoryController {
 
     //현재 스토리 필드를 리턴하는 api
     @GetMapping("/currentStory/{id}")
-    @Operation(summary = "현재 플레이어 스토리", description = "현재 플레이어의 스토리와 선택지들을 리턴합니다.")
+    @Operation(summary = "현재 플레이어 스토리,사망사유", description = "현재 플레이어의 스토리와 선택지들을 리턴합니다.<br>사망 사유도 같이 리턴함니다.")
     public ResponseEntity<Map<String, Object>> currentStory(@PathVariable("id") Long userId){
         Story currentStoryEntity = storyRepository.findByUserId(userId);
         if (currentStoryEntity == null) {
@@ -233,6 +234,7 @@ public class StoryController {
         response.put("choice2",currentStoryDto.getChoice2());
         response.put("choice3",currentStoryDto.getChoice3());
         response.put("image",currentStoryDto.getImage());
+        response.put("causeOfDeath",currentStoryDto.getCauseOfDeath());
         System.out.println(response);
         return ResponseEntity.ok(response);
     }

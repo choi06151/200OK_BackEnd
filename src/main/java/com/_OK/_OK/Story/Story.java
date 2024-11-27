@@ -32,7 +32,7 @@ public class Story {
     @Column
     private String choice3;
     @Column
-    private String CauseOfDeath;
+    private String causeOfDeath;
     @Lob
     private byte[] image;
 

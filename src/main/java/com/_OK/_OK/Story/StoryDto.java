@@ -23,5 +23,5 @@ public class StoryDto {
     private int food;             // 음식의 변동량
     private int damage;             // 음식의 변동량
     private String beforeContent; // 직전 스토리와 선택지
-    private String CauseOfDeath; //사망 사유
+    private String causeOfDeath; //사망 사유
 }
