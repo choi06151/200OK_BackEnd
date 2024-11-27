@@ -157,7 +157,7 @@ public class UserServiceImpl implements UserService{
         userRepository.save(user);
         UserDto userDto = UserMapper.mapToUserDto(user);
         if(!userDto.isAlive()){
-            userDto.setCauseOfDeath("독이든 음식을 먹고 사망...");
+            userDto.setCauseOfDeath("상한 음식을 먹고 사망...");
         }
         return userDto;
     }
