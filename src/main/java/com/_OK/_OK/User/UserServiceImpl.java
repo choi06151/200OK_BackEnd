@@ -156,6 +156,9 @@ public class UserServiceImpl implements UserService{
         setProbability(user);
         userRepository.save(user);
         UserDto userDto = UserMapper.mapToUserDto(user);
+        if(!userDto.isAlive()){
+            userDto.setCauseOfDeath("독이든 음식을 먹고 사망...");
+        }
         return userDto;
     }
 }
