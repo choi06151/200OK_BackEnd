@@ -19,7 +19,7 @@ public class UserDto {
     private boolean alive = true;
     private int probability = 1;
     private int day = 1;
-
+    private String causeOfDeath;
 
 
 }

@@ -11,7 +11,8 @@ public class UserMapper {
                 user.getHp(),
                 user.isAlive(),
                 user.getProbability(),
-                user.getDay()
+                user.getDay(),
+                ""
         );
     }
 
