@@ -210,9 +210,10 @@ public class StoryController {
         if(!userService.isAlive(storyDto,user)){//사망
             user.setAlive(false);
         }
-        if(user.getDay()<4) user.setHp(user.getHp()-2); //매일매일 체력 감소
+        if(user.getDay()<4) user.setHp(user.getHp()-1); //매일매일 체력 감소
         else if(user.getDay()<7)user.setHp(user.getHp()-3);
         else user.setHp(user.getHp()-5);
+        if(user.getHp()<0)user.setAlive(false);
         userService.setProbability(user);
 
         userRepository.save(user);
