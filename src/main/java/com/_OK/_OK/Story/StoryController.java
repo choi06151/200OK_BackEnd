@@ -74,18 +74,20 @@ public class StoryController {
         MonologueDto monologueDto = response.getBody();
         ArrayList<String> processedMonologue = new ArrayList<>();
 
-        // 기존 monologue 리스트에서 문장을 가져와 '.'로 나누기
-        for (String paragraph : monologueDto.getMonologue()) {
-            // '.'으로 분리하고 양끝 공백 제거
-            processedMonologue.addAll(Arrays.stream(paragraph.split("\\."))
-                    .map(String::trim) // 문장 앞뒤 공백 제거
-                    .filter(sentence -> !sentence.isEmpty()) // 빈 문장 제거
-                    .collect(Collectors.toList()));
+        // monologue가 null인지 체크
+        if (monologueDto.getMonologue() != null) {
+            // 기존 monologue 리스트에서 문장을 가져와 '.'로 나누기
+            for (String paragraph : monologueDto.getMonologue()) {
+                // '.'으로 분리하고 양끝 공백 제거
+                processedMonologue.addAll(Arrays.stream(paragraph.split("\\."))
+                        .map(String::trim) // 문장 앞뒤 공백 제거
+                        .filter(sentence -> !sentence.isEmpty()) // 빈 문장 제거
+                        .collect(Collectors.toList()));
+            }
+            // monologue 리스트를 새로 구성
+            monologueDto.setMonologue(processedMonologue);
         }
 
-        // monologue 리스트를 새로 구성
-        // monologue 리스트를 새로 구성
-        monologueDto.setMonologue(processedMonologue);
 
         return ResponseEntity.ok(monologueDto);
     }
