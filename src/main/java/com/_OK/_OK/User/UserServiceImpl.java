@@ -150,8 +150,9 @@ public class UserServiceImpl implements UserService{
         if(dFood<0){
             Random random = new Random();
             int randomNumber = random.nextInt(4) - 1; // 0부터 3까지의 랜덤 숫자 생성 후 -1을 더함
+            if(randomNumber==0)randomNumber = -1;
 
-            user.setHp(user.getHp()-(dFood*randomNumber)); //음식을 먹으면 체력 -1~2 랜덤증가
+            user.setHp(user.getHp()-(dFood*randomNumber)); //음식을 먹으면 체력 -1~2 랜덤증가 (0제외)
         }
         setProbability(user);
         userRepository.save(user);
