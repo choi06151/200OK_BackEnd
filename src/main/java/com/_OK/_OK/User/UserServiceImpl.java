@@ -55,22 +55,22 @@ public class UserServiceImpl implements UserService{
                 user.setProbability(20);
                 break;
             case 5 :
-                user.setProbability(30);
+                user.setProbability(25);
                 break;
             case 4 :
-                user.setProbability(35);
+                user.setProbability(30);
                 break;
             case 3 :
-                user.setProbability(40);
+                user.setProbability(35);
                 break;
             case 2 :
-                user.setProbability(45);
+                user.setProbability(40);
                 break;
             case 1 :
-                user.setProbability(51);
+                user.setProbability(45);
                 break;
             case 0 :
-                user.setProbability(100);
+                user.setProbability(75);
                 break;
             default:
                 user.setProbability(1);
