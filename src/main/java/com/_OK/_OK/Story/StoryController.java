@@ -15,9 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -74,6 +72,20 @@ public class StoryController {
         // FastAPI 서버로 POST 요청 보내기
         ResponseEntity<MonologueDto> response = restTemplate.postForEntity(aiMonoUrl, requestEntity, MonologueDto.class);
         MonologueDto monologueDto = response.getBody();
+        ArrayList<String> processedMonologue = new ArrayList<>();
+
+        // 기존 monologue 리스트에서 문장을 가져와 '.'로 나누기
+        for (String paragraph : monologueDto.getMonologue()) {
+            // '.'으로 분리하고 양끝 공백 제거
+            processedMonologue.addAll(Arrays.stream(paragraph.split("\\."))
+                    .map(String::trim) // 문장 앞뒤 공백 제거
+                    .filter(sentence -> !sentence.isEmpty()) // 빈 문장 제거
+                    .collect(Collectors.toList()));
+        }
+
+        // monologue 리스트를 새로 구성
+        monologueDto.setMonologue(processedMonologue);
+
         return ResponseEntity.ok(monologueDto);
     }
 
