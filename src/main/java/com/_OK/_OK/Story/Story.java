@@ -21,7 +21,7 @@ public class Story {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", unique = true, nullable = false)  // 외래키 설정
     private User user;  // User 엔티티와의 일대일 관계
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String beforeContent;
     @Column
     private String content;
