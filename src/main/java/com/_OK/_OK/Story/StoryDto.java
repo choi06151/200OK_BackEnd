@@ -21,7 +21,10 @@ public class StoryDto {
     private byte[] image;
     private int water;            // 물의 변동량
     private int food;             // 음식의 변동량
-    private int damage;             // 음식의 변동량
+    private int damage;             // 받은 데미지
+    private int difWater;           // 물 변화량
+    private int difFood;             // 음식 변화량
+    private int difHp;              // 체력 변화량
     private String beforeContent; // 직전 스토리와 선택지
     private String causeOfDeath; //사망 사유
 }
