@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -21,8 +22,13 @@ public class UserServiceImpl implements UserService{
     // 정렬된 데이터를 반환
     @Override
     public List<User> getSortedUsers() {
-        return userRepository.findAllByAliveFalseOrderByDayDescFoodDescWaterDescIdAsc();
+        return userRepository.findAllByAliveFalseOrderByDayDescFoodDescWaterDescIdAsc()
+                .stream()
+                .limit(10) // 최대 10개로 제한
+                .collect(Collectors.toList());
     }
+
+
     @Override
     public boolean isAlive(StoryDto storyDto,User user) {
         int hp = user.getHp();
@@ -155,6 +161,7 @@ public class UserServiceImpl implements UserService{
             user.setHp(user.getHp()-(dFood*randomNumber)); //음식을 먹으면 체력 -1~2 랜덤증가 (0제외)
         }
         setProbability(user);
+        if(user.getHp()<0)user.setAlive(false);
         userRepository.save(user);
         UserDto userDto = UserMapper.mapToUserDto(user);
         if(!userDto.isAlive()){
