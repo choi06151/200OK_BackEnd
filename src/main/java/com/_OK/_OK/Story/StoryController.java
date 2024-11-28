@@ -126,7 +126,7 @@ public class StoryController {
     }
 
     @PostMapping("/generate/{id}")
-    @Operation(summary = "스토리 생성", description = "스토리를 생성합니다. <br>이미지는 바이트코드로 리턴합니다.")
+    @Operation(summary = "스토리 생성", description = "스토리를 생성합니다. <br>이미지는 바이트코드로 리턴합니다.<br>dif..필드는 사용자 물,음식,체력의 변화량입니다.")
     @Transactional
     public ResponseEntity<StoryDto> generateStory(
             @PathVariable("id") Long userId, @RequestBody ChoiceDto choiceDto){
@@ -141,6 +141,10 @@ public class StoryController {
         // 헤더 설정
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        // 이전 유저정보, 변화량측정때 사용
+        int beforeHp = user.getHp();
+        int beforeWater = user.getWater();
+        int beforeFood = user.getFood();
 
         // 요청 본문을 HttpEntity로 래핑
         HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
@@ -211,6 +215,9 @@ public class StoryController {
         else user.setHp(user.getHp()-5);
 
         userRepository.save(user);
+        storyDto.setDifFood(user.getFood()-beforeFood);
+        storyDto.setDifWater(user.getWater()-beforeWater);
+        storyDto.setDifHp(user.getHp()-beforeHp);
         // FastAPI 서버에서 반환된 값을 리턴
         return ResponseEntity.ok(storyDto);
     }

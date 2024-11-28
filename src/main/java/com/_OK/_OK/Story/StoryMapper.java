@@ -14,6 +14,9 @@ public class StoryMapper {
                 0,
                 0,
                 0,
+                0,
+                0,
+                0,
                 story.getBeforeContent(),
                 story.getCauseOfDeath()
         );
