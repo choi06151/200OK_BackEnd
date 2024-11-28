@@ -213,6 +213,7 @@ public class StoryController {
         if(user.getDay()<4) user.setHp(user.getHp()-2); //매일매일 체력 감소
         else if(user.getDay()<7)user.setHp(user.getHp()-3);
         else user.setHp(user.getHp()-5);
+        userService.setProbability(user);
 
         userRepository.save(user);
         storyDto.setDifFood(user.getFood()-beforeFood);
