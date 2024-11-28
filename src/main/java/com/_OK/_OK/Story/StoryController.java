@@ -84,6 +84,7 @@ public class StoryController {
         }
 
         // monologue 리스트를 새로 구성
+        // monologue 리스트를 새로 구성
         monologueDto.setMonologue(processedMonologue);
 
         return ResponseEntity.ok(monologueDto);
@@ -215,7 +216,6 @@ public class StoryController {
             user.setHp(user.getHp()+(user.getWater()+storyDto.getWater()));
         }
         //User 정보 변경
-        user.setDay(user.getDay()+1);
         user.setFood(user.getFood()+storyDto.getFood()); //음수불가
         user.setWater(user.getWater()+storyDto.getWater()); //음수불가
         //유저의 생존 사망을 판단.
@@ -226,6 +226,7 @@ public class StoryController {
         else if(user.getDay()<7)user.setHp(user.getHp()-3);
         else user.setHp(user.getHp()-5);
         if(user.getHp()<0)user.setAlive(false);
+        if(user.isAlive())user.setDay(user.getDay()+1);
         userService.setProbability(user);
 
         userRepository.save(user);
