@@ -161,6 +161,7 @@ public class UserServiceImpl implements UserService{
             user.setHp(user.getHp()-(dFood*randomNumber)); //음식을 먹으면 체력 -1~2 랜덤증가 (0제외)
         }
         setProbability(user);
+        if(user.getHp()<0)user.setAlive(false);
         userRepository.save(user);
         UserDto userDto = UserMapper.mapToUserDto(user);
         if(!userDto.isAlive()){
